@@ -24,7 +24,7 @@ public class ConsoleProgress implements Runnable {
                 System.out.print("\rLoading...\\");
                 Thread.sleep(SLEEP_DURATION);
             } catch (InterruptedException e) {
-                break;
+                Thread.currentThread().interrupt();
             }
         }
     }
