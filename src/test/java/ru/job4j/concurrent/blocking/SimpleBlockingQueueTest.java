@@ -1,6 +1,7 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.blocking;
 
 import org.junit.Test;
+import ru.job4j.concurrent.blocking.SimpleBlockingQueue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +12,7 @@ import static org.junit.Assert.*;
 public class SimpleBlockingQueueTest {
 
     /**
-     * tests the work of the SimpleBlockingQueue (@link ru.job4j.concurrent.SimpleBlockingQueue) in multi-threaded mode.
+     * tests the work of the SimpleBlockingQueue (@link ru.job4j.concurrent.blocking.SimpleBlockingQueue) in multi-threaded mode.
      *
      * @throws InterruptedException -  throws exception.
      */
@@ -54,7 +55,7 @@ public class SimpleBlockingQueueTest {
     }
 
     /**
-     * tests offer (@link ru.job4j.concurrent.SimpleBlockingQueue#offer)
+     * tests offer (@link ru.job4j.concurrent.blocking.SimpleBlockingQueue#offer)
      *
      * @throws InterruptedException -  throws exception.
      */

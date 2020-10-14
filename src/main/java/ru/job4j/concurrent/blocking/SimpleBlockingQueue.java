@@ -1,4 +1,4 @@
-package ru.job4j.concurrent;
+package ru.job4j.concurrent.blocking;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -57,5 +57,15 @@ public class SimpleBlockingQueue<T> {
         T value = queue.poll();
         notifyAll();
         return value;
+    }
+
+    public synchronized int capacity() {
+        return limit;
+    }
+
+    public int size() {
+        synchronized (this) {
+            return queue.size();
+        }
     }
 }
