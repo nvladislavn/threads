@@ -3,8 +3,12 @@ package ru.job4j.concurrent.blocking;
 import org.junit.Test;
 import ru.job4j.concurrent.blocking.SimpleBlockingQueue;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -63,5 +67,53 @@ public class SimpleBlockingQueueTest {
     public void shouldReturnException() throws InterruptedException {
         SimpleBlockingQueue<String> bq = new SimpleBlockingQueue<>(3);
         bq.offer(null);
+    }
+
+    /**
+     * tests work of SimpleBlockingQueue (@link ru.job4j.concurrent.blocking.SimpleBlockingQueue) in multi_threaded mode.
+     */
+    @Test
+    public void fetchListShouldBeEqualsExpectedList() {
+        var bQueue = new SimpleBlockingQueue<Integer>(3);
+        var actual = new CopyOnWriteArrayList<Integer>();
+        Thread producer = new Thread(
+                () -> {
+                    for (int i = 1; i <= bQueue.capacity(); i++) {
+                        try {
+                            bQueue.offer(i);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+        );
+        Thread consumer = new Thread(
+                () -> {
+                    while (!bQueue.isEmpty() || !Thread.currentThread().isInterrupted()) {
+                        try {
+                            actual.add(bQueue.poll());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                }
+        );
+        producer.start();
+        consumer.start();
+        try {
+            producer.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        consumer.interrupt();
+        try {
+            consumer.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        List<Integer> expected = List.of(1, 2, 3);
+        assertThat(actual, is(expected));
     }
 }
