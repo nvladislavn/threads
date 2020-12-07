@@ -2,7 +2,9 @@ package ru.job4j.concurrent.blocking;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,7 +16,7 @@ import java.util.Queue;
  */
 
 @ThreadSafe
-public class SimpleBlockingQueue<T> {
+public class SimpleBlockingQueue<T> implements Iterable<T> {
 
     private final int limit;
 
@@ -69,5 +71,16 @@ public class SimpleBlockingQueue<T> {
 
     public synchronized boolean isEmpty() {
         return queue.isEmpty();
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code T}.
+     *
+     * @return an Iterator.
+     */
+    @NotNull
+    @Override
+    public synchronized Iterator<T> iterator() {
+        return queue.iterator();
     }
 }
